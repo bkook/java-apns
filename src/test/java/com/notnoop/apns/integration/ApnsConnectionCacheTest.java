@@ -1,6 +1,17 @@
 package com.notnoop.apns.integration;
 
-import org.junit.*;
+import static com.notnoop.apns.utils.FixedCertificates.TEST_FEEDBACK_PORT;
+import static com.notnoop.apns.utils.FixedCertificates.TEST_GATEWAY_PORT;
+import static com.notnoop.apns.utils.FixedCertificates.TEST_HOST;
+import static com.notnoop.apns.utils.FixedCertificates.clientContext;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.notnoop.apns.APNS;
 import com.notnoop.apns.ApnsDelegate;
@@ -11,10 +22,6 @@ import com.notnoop.apns.EnhancedApnsNotification;
 import com.notnoop.apns.SimpleApnsNotification;
 import com.notnoop.apns.utils.ApnsServerStub;
 import com.notnoop.apns.utils.FixedCertificates;
-import static com.notnoop.apns.utils.FixedCertificates.*;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ApnsConnectionCacheTest {
 

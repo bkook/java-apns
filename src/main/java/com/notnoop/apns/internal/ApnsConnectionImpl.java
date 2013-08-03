@@ -42,6 +42,7 @@ import javax.net.ssl.SSLSocketFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.appengine.api.ThreadManager;
 import com.notnoop.apns.ApnsDelegate;
 import com.notnoop.apns.ApnsNotification;
 import com.notnoop.apns.DeliveryError;
@@ -108,12 +109,12 @@ public class ApnsConnectionImpl implements ApnsConnection {
     }
 
     private void monitorSocket(final Socket socket) {
-        class MonitoringThread extends Thread {
-
-            @Override
-            public void run() {
-
-                try {
+        
+    	Thread t = ThreadManager.createBackgroundThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
                     InputStream in = socket.getInputStream();
 
                     // TODO(jwilson): this should readFully()
@@ -180,10 +181,12 @@ public class ApnsConnectionImpl implements ApnsConnection {
                 } finally {
                     close();
                 }
-            }
-        }
-        Thread t = new MonitoringThread();
-        t.setDaemon(true);
+			}
+			
+		});
+        
+//        t.setDaemon(true);
+    	
         t.start();
     }
     // This method is only called from sendMessage.  sendMessage
